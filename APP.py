@@ -1,7 +1,5 @@
-from ntpath import join
-from os import access
-from typing import Optional
-from numpy import True_
+
+from logging import warn
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -79,6 +77,8 @@ menu=['Keterangan','Data yang Sudah Dibersihkan','Grafik Jumlah Produksi Minyak 
 ,'Grafik Besar Negara Dengan Jumlah Produksi Terbesar (Kumulatif)','Produksi Minyak Negara']
 choice = st.selectbox('Pilih Menu',menu)
 
+
+
 if choice=='Keterangan':
     st.subheader('Keterangan')
     st.markdown('Ini merupakan app yang dibuat oleh Nisoyawa Paskahino Gulo (NIM: 12220029) dengan tujuan UAS Pemrograman Komputer IF 2112. Jika ingin menggunakan App ini pilih menu dengan beberapa analisis yang sudah dibuat.', unsafe_allow_html=False)
@@ -102,6 +102,9 @@ if choice=='Grafik Jumlah Produksi Minyak Mentah Terhadap Waktu':
 
     data_soal_a=st.selectbox('Pilih Negara',(negara_list))
     st.write('Negara Yang Dipilih',data_soal_a)
+    colors = st.select_slider(
+     'Pilih Warna',
+     options=['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'])
 
 
 #PROGRAM MEMBUAT JUMLAH MINYAK MENTAH TERHADAP TAHUN
@@ -118,17 +121,13 @@ if choice=='Grafik Jumlah Produksi Minyak Mentah Terhadap Waktu':
     tahun_produksi=data1['tahun']
 #BUAT PLOT
     fig, ax = plt.subplots()
-#BUAT WARNA
-    cmap_name = 'tab10'
-    cmap = cm.get_cmap(cmap_name)
-    colors = cmap.colors[:len(jumlah_produksi)]
 
-
+    
 
 
 
 #BUAT PLOT
-    ax.bar(tahun_produksi, jumlah_produksi, color=colors)
+    ax.bar(tahun_produksi, jumlah_produksi,color=colors)
     ax.set_xlabel('Tahun', fontsize=12)
     ax.set_ylabel("Jumlah Produksi", fontsize=12)
 
@@ -137,7 +136,7 @@ if choice=='Grafik Jumlah Produksi Minyak Mentah Terhadap Waktu':
 #LINE PLOT
     fig1=plt.figure()
     ax=fig1.add_subplot()
-    ax.plot(tahun_produksi, jumlah_produksi)
+    ax.plot(tahun_produksi, jumlah_produksi,color=colors)
 
     ax.set_ylabel('Tahun')
     ax.set_xlabel('Produksi')
@@ -167,10 +166,7 @@ elif choice=='Grafik Besar Negara Dengan Jumlah Produksi Terbesar':
     data_soal_b_1=st.selectbox('Pilih Tahun',(tahun_list))
     st.write('Tahun Yang Dipilih',data_soal_b_1)
 
-
-    data_soal_b_2=st.slider("Pilih Banyaknya Urutannya",max_value=20,min_value=1)
-
-
+    data_soal_b_2=st.number_input('Pilih Banyaknya Urutan',step=1,min_value=1)
 
     inputan_tahun=data_soal_b_1#input('masukkan Tahun: ')
     inputan_peringkat_ke=data_soal_b_2#input('masukkan peringkat: ')
@@ -204,7 +200,7 @@ elif choice=='Grafik Besar Negara Dengan Jumlah Produksi Terbesar (Kumulatif)':
     st.subheader('Grafik Besar Negara Dengan Jumlah Produksi Terbesar (Kumulatif)')
     
     #SOAL C START
-    data_soal_c=st.slider("Pilih Banyaknya Urutan",max_value=20,min_value=1)
+    data_soal_c=st.number_input('Pilih Banyaknya Urutan',step=1,min_value=1)
     list_masukan_banyak_urutan= data_soal_c #input('masukkan jumlah urutan: ')
 
     data4=pd.DataFrame(df,columns=['tahun','nama_lengkap_negara','produksi'])
